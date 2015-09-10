@@ -1,0 +1,41 @@
+{
+    "name": "harunyasar/odooclient",
+    "description": "XML-RPC client for Odoo with phpxml package.",
+    "keywords": [
+        "odoo",
+        "client",
+        "phpxmlrpc",
+        "xmlrpc"
+    ],
+    "homepage": "https://github.com/harunyasar/odooclient",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Harun Yaşar",
+            "email": "harunyasar@mail.com",
+            "homepage": "http://harunyasar.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "phpxmlrpc/phpxmlrpc" : "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Odoo\\Client\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Odoo\\Client\\Test\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
