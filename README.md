@@ -11,7 +11,7 @@ $ composer require harunyasar/odooclient
 ## Usage
 
 ``` php
-$client = new Odoo\Client\OdooClient('host', 'port', 'db', 'username', 'password');
+$client = new Odoo\Client\OdooClient($host, $port, $db, $username, $password);
 $client->create('modelName', $dataArr);
 ```
 
