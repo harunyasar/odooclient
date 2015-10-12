@@ -261,9 +261,17 @@ class OdooClient
     }
 
     /**
+     * @param $model
+     * @param $method
+     * @param $data
+     * @return mixed
+     */
+
+    /**
      * Odoo XML-RPC execute method
-     * @param string $model Odoo model name
-     * @param array  $data  Request input data
+     * @param string $model  Odoo model name
+     * @param string $method Custom method
+     * @param array  $data   Request input data
      * @return \xmlrpcresp
      */
     public function execute($model, $method, $data)
