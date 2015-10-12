@@ -266,11 +266,11 @@ class OdooClient
      * @param array  $data  Request input data
      * @return \xmlrpcresp
      */
-    public function execute($model, $data)
+    public function execute($model, $method, $data)
     {
         $msg = $this->_execute();
         $msg->addParam(new xmlrpcval($model, 'string'));
-        $msg->addParam(new xmlrpcval(self::$_execute, 'string'));
+        $msg->addParam(new xmlrpcval($method, 'string'));
         $msg->addParam(new xmlrpcval($data, 'struct'));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
