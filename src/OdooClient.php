@@ -199,7 +199,7 @@ class OdooClient
      */
     private function _execute()
     {
-        $execute = new xmlrpcmsg('execute');
+        $execute = new xmlrpcmsg(self::$_execute);
 
         $execute->addParam(new xmlrpcval($this->_db, 'string'));
         $execute->addParam(new xmlrpcval($this->_uid(), 'int'));
