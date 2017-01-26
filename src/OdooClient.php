@@ -3,6 +3,7 @@
 use Odoo\Client\Connection\Connection;
 use PhpXmlRpc\Value as xmlrpcval;
 use PhpXmlRpc\Request as xmlrpcmsg;
+use PhpXmlRpc\Response as xmlrpcresp;
 
 class OdooClient
 {
@@ -135,7 +136,7 @@ class OdooClient
 
     /**
      * Version of Odoo
-     * @return \PhpXmlRpc\Response|\PhpXmlRpc\Response[]
+     * @return \xmlrpcresp Odoo XML-RPC reponse
      */
     public function version()
     {
@@ -209,7 +210,7 @@ class OdooClient
 
     /**
      * Odoo XML-RPC context_get method of logged user
-     * @return \PhpXmlRpc\Response|\PhpXmlRpc\Response[]
+     * @return \xmlrpcresp Odoo XML-RPC reponse
      */
     public function context_get()
     {
@@ -226,7 +227,7 @@ class OdooClient
      * Odoo XML-RPC create method
      * @param string $model Odoo model name
      * @param array $data Request input data
-     * @return \xmlrpcresp
+     * @return \xmlrpcresp Odoo XML-RPC reponse
      */
     public function create($model, $data)
     {
@@ -244,7 +245,7 @@ class OdooClient
      * Odoo XML-RPC search method
      * @param string $model Odoo model name
      * @param array $domain Domain filter array
-     * @return \xmlrpcresp
+     * @return \xmlrpcresp Odoo XML-RPC reponse
      */
     public function search($model, $domain)
     {
@@ -263,7 +264,7 @@ class OdooClient
      * @param string $model Odoo model name
      * @param array $ids Data IDs
      * @param array $fields Fields of data
-     * @return \xmlrpcresp
+     * @return \xmlrpcresp Odoo XML-RPC reponse
      */
     public function read($model, $ids, $fields)
     {
@@ -283,7 +284,7 @@ class OdooClient
      * @param string $model Odoo model name
      * @param array $domain Domain filter array
      * @param array $fields Fields of data
-     * @return \PhpXmlRpc\Response|\PhpXmlRpc\Response[]
+     * @return \xmlrpcresp Odoo XML-RPC reponse
      */
     public function search_read($model, array $domain, array $fields)
     {
@@ -298,6 +299,12 @@ class OdooClient
         return $response;
     }
 
+    /**
+     * Odoo XML-RPC name_get method
+     * @param string $model Odoo model name
+     * @param array $ids Data IDs
+     * @return xmlrpcresp|\PhpXmlRpc\Response[]
+     */
     public function name_get($model, array $ids)
     {
         $msg = $this->_execute();
@@ -314,7 +321,7 @@ class OdooClient
      * Odoo XML-RPC unlink method
      * @param string $model Odoo model name
      * @param array $ids Data IDs
-     * @return \xmlrpcresp
+     * @return \xmlrpcresp Odoo XML-RPC reponse
      */
     public function unlink($model, $ids)
     {
@@ -333,7 +340,7 @@ class OdooClient
      * @param string $model Odoo model name
      * @param array $ids Data IDs
      * @param array $values New values
-     * @return \xmlrpcresp
+     * @return \xmlrpcresp Odoo XML-RPC reponse
      */
     public function write($model, $ids, $values)
     {
@@ -360,7 +367,7 @@ class OdooClient
      * @param string $model Odoo model name
      * @param string $method Custom method
      * @param array $data Request input data
-     * @return \xmlrpcresp
+     * @return \xmlrpcresp Odoo XML-RPC reponse
      */
     public function execute($model, $method, $data)
     {
