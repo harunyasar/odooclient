@@ -21,6 +21,12 @@ class OdooClient
     private static $_object = '/xmlrpc/object';
 
     /**
+     * Odoo XML-RPC context_get method
+     * @var string $_context_get
+     */
+    private static $_context_get = 'context_get';
+
+    /**
      * Odoo XML-RPC create method
      * @var string $_create
      */
@@ -187,6 +193,21 @@ class OdooClient
         $execute->addParam(new xmlrpcval($this->_password, 'string'));
 
         return $execute;
+    }
+
+    /**
+     * Odoo XML-RPC context_get method of logged user
+     * @return \PhpXmlRpc\Response|\PhpXmlRpc\Response[]
+     */
+    public function context_get()
+    {
+        $msg = $this->_execute();
+        $msg->addParam(new xmlrpcval('res.users', 'string'));
+        $msg->addParam(new xmlrpcval(self::$_context_get, 'string'));
+
+        $response = $this->_connection->create(self::$_object)->send($msg);
+
+        return $response;
     }
 
     /**
