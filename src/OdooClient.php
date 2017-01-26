@@ -99,9 +99,9 @@ class OdooClient
 
     /**
      * OdooClient constructor
-     * @param string $host     Connection host
-     * @param string $port     Connection port
-     * @param string $db       Odoo database name
+     * @param string $host Connection host
+     * @param string $port Connection port
+     * @param string $db Odoo database name
      * @param string $username Login username
      * @param string $password Login password
      */
@@ -169,7 +169,7 @@ class OdooClient
     /**
      * Odoo XML-RPC create method
      * @param string $model Odoo model name
-     * @param array  $data  Request input data
+     * @param array $data Request input data
      * @return \xmlrpcresp
      */
     public function create($model, $data)
@@ -186,8 +186,8 @@ class OdooClient
 
     /**
      * Odoo XML-RPC search method
-     * @param string $model  Odoo model name
-     * @param array  $domain Domain filter array
+     * @param string $model Odoo model name
+     * @param array $domain Domain filter array
      * @return \xmlrpcresp
      */
     public function search($model, $domain)
@@ -204,9 +204,9 @@ class OdooClient
 
     /**
      * Odoo XML-RPC read method
-     * @param string $model  Odoo model name
-     * @param array  $ids    Data IDs
-     * @param array  $fields Fields of data
+     * @param string $model Odoo model name
+     * @param array $ids Data IDs
+     * @param array $fields Fields of data
      * @return \xmlrpcresp
      */
     public function read($model, $ids, $fields)
@@ -225,7 +225,7 @@ class OdooClient
     /**
      * Odoo XML-RPC unlink method
      * @param string $model Odoo model name
-     * @param array  $ids   Data IDs
+     * @param array $ids Data IDs
      * @return \xmlrpcresp
      */
     public function unlink($model, $ids)
@@ -242,9 +242,9 @@ class OdooClient
 
     /**
      * Odoo XML-RPC write method
-     * @param string $model  Odoo model name
-     * @param array  $ids    Data IDs
-     * @param array  $values New values
+     * @param string $model Odoo model name
+     * @param array $ids Data IDs
+     * @param array $values New values
      * @return \xmlrpcresp
      */
     public function write($model, $ids, $values)
@@ -269,9 +269,9 @@ class OdooClient
 
     /**
      * Odoo XML-RPC execute method
-     * @param string $model  Odoo model name
+     * @param string $model Odoo model name
      * @param string $method Custom method
-     * @param array  $data   Request input data
+     * @param array $data Request input data
      * @return \xmlrpcresp
      */
     public function execute($model, $method, $data)
