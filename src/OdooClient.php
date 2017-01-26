@@ -100,7 +100,7 @@ class OdooClient
     /**
      * OdooClient constructor
      * @param string $host Connection host
-     * @param string $port Connection port
+     * @param int $port Connection port
      * @param string $db Odoo database name
      * @param string $username Login username
      * @param string $password Login password
@@ -113,6 +113,19 @@ class OdooClient
         $this->_username = $username;
         $this->_password = $password;
         $this->_connection = new Connection($this->_host, $this->_port);
+    }
+
+    /**
+     * Version of Odoo
+     * @return \PhpXmlRpc\Response|\PhpXmlRpc\Response[]
+     */
+    public function version()
+    {
+        $message = new xmlrpcmsg('version');
+
+        $response = $this->_connection->create(self::$_common)->send($message);
+
+        return $response;
     }
 
     /**
