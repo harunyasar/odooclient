@@ -58,9 +58,15 @@ class OdooClient
 
     /**
      * Odoo XML-RPC search_read method
-     * @var string $_read
+     * @var string $_search_read
      */
     private static $_search_read = 'search_read';
+
+    /**
+     * Odoo XML-RPC name_get method
+     * @var string $_name_get
+     */
+    private static $_name_get = 'name_get';
 
     /**
      * Odoo XML-RPC directly execute custom method
@@ -286,6 +292,18 @@ class OdooClient
         $msg->addParam(new xmlrpcval(self::$_search_read, 'string'));
         $msg->addParam(new xmlrpcval($domain, 'array'));
         $msg->addParam(new xmlrpcval($fields, 'array'));
+
+        $response = $this->_connection->create(self::$_object)->send($msg);
+
+        return $response;
+    }
+
+    public function name_get($model, array $ids)
+    {
+        $msg = $this->_execute();
+        $msg->addParam(new xmlrpcval($model, 'string'));
+        $msg->addParam(new xmlrpcval(self::$_name_get, 'string'));
+        $msg->addParam(new xmlrpcval($ids, 'array'));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
 
