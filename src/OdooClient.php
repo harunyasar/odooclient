@@ -57,6 +57,12 @@ class OdooClient
     private static $_read = 'read';
 
     /**
+     * Odoo XML-RPC search_read method
+     * @var string $_read
+     */
+    private static $_search_read = 'search_read';
+
+    /**
      * Odoo XML-RPC directly execute custom method
      * @var string $_execute
      */
@@ -259,6 +265,26 @@ class OdooClient
         $msg->addParam(new xmlrpcval($model, 'string'));
         $msg->addParam(new xmlrpcval(self::$_read, 'string'));
         $msg->addParam(new xmlrpcval($ids, 'array'));
+        $msg->addParam(new xmlrpcval($fields, 'array'));
+
+        $response = $this->_connection->create(self::$_object)->send($msg);
+
+        return $response;
+    }
+
+    /**
+     * Odoo XML-RPC search_read method
+     * @param string $model Odoo model name
+     * @param array $domain Domain filter array
+     * @param array $fields Fields of data
+     * @return \PhpXmlRpc\Response|\PhpXmlRpc\Response[]
+     */
+    public function search_read($model, array $domain, array $fields)
+    {
+        $msg = $this->_execute();
+        $msg->addParam(new xmlrpcval($model, 'string'));
+        $msg->addParam(new xmlrpcval(self::$_search_read, 'string'));
+        $msg->addParam(new xmlrpcval($domain, 'array'));
         $msg->addParam(new xmlrpcval($fields, 'array'));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
