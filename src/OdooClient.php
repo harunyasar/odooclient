@@ -165,6 +165,16 @@ class OdooClient
     }
 
     /**
+     * Public method to retrieves logged user ID
+     * @return string     Logged user ID
+     * @throws \Exception Throws exception when login fail
+     */
+    public function getUid()
+    {
+        return $this->_uid();
+    }
+
+    /**
      * Message creator for XML-RPC request
      * @return xmlrpcmsg
      */
