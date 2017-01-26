@@ -1,8 +1,8 @@
 <?php namespace Odoo\Client;
 
 use Odoo\Client\Connection\Connection;
-use xmlrpcval;
-use xmlrpcmsg;
+use PhpXmlRpc\Value as xmlrpcval;
+use PhpXmlRpc\Request as xmlrpcmsg;
 
 class OdooClient
 {
