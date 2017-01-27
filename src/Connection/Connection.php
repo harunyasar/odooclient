@@ -1,7 +1,7 @@
 <?php namespace Odoo\Client\Connection;
 
 use Odoo\Client\Output\UrlOutput;
-use xmlrpc_client;
+use PhpXmlRpc\Client as xmlrpc_client;
 
 class Connection implements ConnectionInterface
 {

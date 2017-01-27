@@ -1,8 +1,9 @@
 <?php namespace Odoo\Client;
 
 use Odoo\Client\Connection\Connection;
-use xmlrpcval;
-use xmlrpcmsg;
+use PhpXmlRpc\Value as xmlrpcval;
+use PhpXmlRpc\Request as xmlrpcmsg;
+use PhpXmlRpc\Response as xmlrpcresp;
 
 class OdooClient
 {
@@ -19,6 +20,12 @@ class OdooClient
      * @var string $_object
      */
     private static $_object = '/xmlrpc/object';
+
+    /**
+     * Odoo XML-RPC context_get method
+     * @var string $_context_get
+     */
+    private static $_context_get = 'context_get';
 
     /**
      * Odoo XML-RPC create method
@@ -49,6 +56,18 @@ class OdooClient
      * @var string $_read
      */
     private static $_read = 'read';
+
+    /**
+     * Odoo XML-RPC search_read method
+     * @var string $_search_read
+     */
+    private static $_search_read = 'search_read';
+
+    /**
+     * Odoo XML-RPC name_get method
+     * @var string $_name_get
+     */
+    private static $_name_get = 'name_get';
 
     /**
      * Odoo XML-RPC directly execute custom method
@@ -99,9 +118,9 @@ class OdooClient
 
     /**
      * OdooClient constructor
-     * @param string $host     Connection host
-     * @param string $port     Connection port
-     * @param string $db       Odoo database name
+     * @param string $host Connection host
+     * @param int $port Connection port
+     * @param string $db Odoo database name
      * @param string $username Login username
      * @param string $password Login password
      */
@@ -113,6 +132,19 @@ class OdooClient
         $this->_username = $username;
         $this->_password = $password;
         $this->_connection = new Connection($this->_host, $this->_port);
+    }
+
+    /**
+     * Version of Odoo
+     * @return \xmlrpcresp Odoo XML-RPC reponse
+     */
+    public function version()
+    {
+        $message = new xmlrpcmsg('version');
+
+        $response = $this->_connection->create(self::$_common)->send($message);
+
+        return $response;
     }
 
     /**
@@ -152,12 +184,22 @@ class OdooClient
     }
 
     /**
+     * Public method to retrieves logged user ID
+     * @return string     Logged user ID
+     * @throws \Exception Throws exception when login fail
+     */
+    public function getUid()
+    {
+        return $this->_uid();
+    }
+
+    /**
      * Message creator for XML-RPC request
      * @return xmlrpcmsg
      */
     private function _execute()
     {
-        $execute = new xmlrpcmsg('execute');
+        $execute = new xmlrpcmsg(self::$_execute);
 
         $execute->addParam(new xmlrpcval($this->_db, 'string'));
         $execute->addParam(new xmlrpcval($this->_uid(), 'int'));
@@ -167,10 +209,25 @@ class OdooClient
     }
 
     /**
+     * Odoo XML-RPC context_get method of logged user
+     * @return \xmlrpcresp Odoo XML-RPC reponse
+     */
+    public function context_get()
+    {
+        $msg = $this->_execute();
+        $msg->addParam(new xmlrpcval('res.users', 'string'));
+        $msg->addParam(new xmlrpcval(self::$_context_get, 'string'));
+
+        $response = $this->_connection->create(self::$_object)->send($msg);
+
+        return $response;
+    }
+
+    /**
      * Odoo XML-RPC create method
      * @param string $model Odoo model name
-     * @param array  $data  Request input data
-     * @return \xmlrpcresp
+     * @param array $data Request input data
+     * @return \xmlrpcresp Odoo XML-RPC reponse
      */
     public function create($model, $data)
     {
@@ -186,9 +243,9 @@ class OdooClient
 
     /**
      * Odoo XML-RPC search method
-     * @param string $model  Odoo model name
-     * @param array  $domain Domain filter array
-     * @return \xmlrpcresp
+     * @param string $model Odoo model name
+     * @param array $domain Domain filter array
+     * @return \xmlrpcresp Odoo XML-RPC reponse
      */
     public function search($model, $domain)
     {
@@ -204,10 +261,10 @@ class OdooClient
 
     /**
      * Odoo XML-RPC read method
-     * @param string $model  Odoo model name
-     * @param array  $ids    Data IDs
-     * @param array  $fields Fields of data
-     * @return \xmlrpcresp
+     * @param string $model Odoo model name
+     * @param array $ids Data IDs
+     * @param array $fields Fields of data
+     * @return \xmlrpcresp Odoo XML-RPC reponse
      */
     public function read($model, $ids, $fields)
     {
@@ -223,10 +280,48 @@ class OdooClient
     }
 
     /**
+     * Odoo XML-RPC search_read method
+     * @param string $model Odoo model name
+     * @param array $domain Domain filter array
+     * @param array $fields Fields of data
+     * @return \xmlrpcresp Odoo XML-RPC reponse
+     */
+    public function search_read($model, array $domain, array $fields)
+    {
+        $msg = $this->_execute();
+        $msg->addParam(new xmlrpcval($model, 'string'));
+        $msg->addParam(new xmlrpcval(self::$_search_read, 'string'));
+        $msg->addParam(new xmlrpcval($domain, 'array'));
+        $msg->addParam(new xmlrpcval($fields, 'array'));
+
+        $response = $this->_connection->create(self::$_object)->send($msg);
+
+        return $response;
+    }
+
+    /**
+     * Odoo XML-RPC name_get method
+     * @param string $model Odoo model name
+     * @param array $ids Data IDs
+     * @return xmlrpcresp|\PhpXmlRpc\Response[]
+     */
+    public function name_get($model, array $ids)
+    {
+        $msg = $this->_execute();
+        $msg->addParam(new xmlrpcval($model, 'string'));
+        $msg->addParam(new xmlrpcval(self::$_name_get, 'string'));
+        $msg->addParam(new xmlrpcval($ids, 'array'));
+
+        $response = $this->_connection->create(self::$_object)->send($msg);
+
+        return $response;
+    }
+
+    /**
      * Odoo XML-RPC unlink method
      * @param string $model Odoo model name
-     * @param array  $ids   Data IDs
-     * @return \xmlrpcresp
+     * @param array $ids Data IDs
+     * @return \xmlrpcresp Odoo XML-RPC reponse
      */
     public function unlink($model, $ids)
     {
@@ -242,10 +337,10 @@ class OdooClient
 
     /**
      * Odoo XML-RPC write method
-     * @param string $model  Odoo model name
-     * @param array  $ids    Data IDs
-     * @param array  $values New values
-     * @return \xmlrpcresp
+     * @param string $model Odoo model name
+     * @param array $ids Data IDs
+     * @param array $values New values
+     * @return \xmlrpcresp Odoo XML-RPC reponse
      */
     public function write($model, $ids, $values)
     {
@@ -269,10 +364,10 @@ class OdooClient
 
     /**
      * Odoo XML-RPC execute method
-     * @param string $model  Odoo model name
+     * @param string $model Odoo model name
      * @param string $method Custom method
-     * @param array  $data   Request input data
-     * @return \xmlrpcresp
+     * @param array $data Request input data
+     * @return \xmlrpcresp Odoo XML-RPC reponse
      */
     public function execute($model, $method, $data)
     {
