@@ -251,12 +251,18 @@ class OdooClient
      * @return \xmlrpcresp Odoo XML-RPC reponse
      * @throws \Exception
      */
-    public function search($model, $domain)
+    public function search($model, $domain, xmlrpcval $context = NULL, $fields = NULL)
     {
         $msg = $this->_execute();
         $msg->addParam(new xmlrpcval($model, 'string'));
         $msg->addParam(new xmlrpcval(self::$_search, 'string'));
         $msg->addParam(new xmlrpcval($domain, 'array'));
+
+        if (!is_null($fields))
+            $msg->addParam(new xmlrpcval($fields, 'array'));
+
+        if (!is_null($context))
+            $msg->addParam(new xmlrpcval($context, 'struct'));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
 
@@ -272,13 +278,18 @@ class OdooClient
      * @return xmlrpcresp
      * @throws \Exception
      */
-    public function read($model, $ids, $fields = NULL)
+    public function read($model, $ids, xmlrpcval $context = NULL, $fields = NULL)
     {
         $msg = $this->_execute();
         $msg->addParam(new xmlrpcval($model, 'string'));
         $msg->addParam(new xmlrpcval(self::$_read, 'string'));
         $msg->addParam(new xmlrpcval($ids, 'array'));
-        $msg->addParam(new xmlrpcval($fields, 'array'));
+
+        if (!is_null($fields))
+            $msg->addParam(new xmlrpcval($fields, 'array'));
+
+        if (!is_null($context))
+            $msg->addParam(new xmlrpcval($context, 'struct'));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
 
@@ -293,13 +304,18 @@ class OdooClient
      * @return \xmlrpcresp Odoo XML-RPC reponse
      * @throws \Exception
      */
-    public function search_read($model, array $domain, array $fields)
+    public function search_read($model, $domain, xmlrpcval $context = NULL, $fields = NULL)
     {
         $msg = $this->_execute();
         $msg->addParam(new xmlrpcval($model, 'string'));
         $msg->addParam(new xmlrpcval(self::$_search_read, 'string'));
         $msg->addParam(new xmlrpcval($domain, 'array'));
-        $msg->addParam(new xmlrpcval($fields, 'array'));
+
+        if (!is_null($fields))
+            $msg->addParam(new xmlrpcval($fields, 'array'));
+
+        if (!is_null($context))
+            $msg->addParam(new xmlrpcval($context, 'struct'));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
 
@@ -313,12 +329,15 @@ class OdooClient
      * @return xmlrpcresp|\PhpXmlRpc\Response[]
      * @throws \Exception
      */
-    public function name_get($model, array $ids)
+    public function name_get($model, $ids, xmlrpcval $context = NULL)
     {
         $msg = $this->_execute();
         $msg->addParam(new xmlrpcval($model, 'string'));
         $msg->addParam(new xmlrpcval(self::$_name_get, 'string'));
         $msg->addParam(new xmlrpcval($ids, 'array'));
+
+        if (!is_null($context))
+            $msg->addParam(new xmlrpcval($context, 'struct'));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
 
