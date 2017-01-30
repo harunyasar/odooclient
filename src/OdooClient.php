@@ -137,6 +137,7 @@ class OdooClient
     /**
      * Version of Odoo
      * @return \xmlrpcresp Odoo XML-RPC reponse
+     * @throws \Exception
      */
     public function version()
     {
@@ -144,7 +145,7 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_common)->send($message);
 
-        return $response;
+        return $this->_response($response);
     }
 
     /**
@@ -162,11 +163,7 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_common)->send($message);
 
-        if ($response->errno != 0) {
-            throw new \Exception($response->faultString());
-        }
-
-        return $response;
+        return $this->_response($response);
     }
 
     /**
@@ -199,28 +196,33 @@ class OdooClient
      */
     private function _execute()
     {
-        $execute = new xmlrpcmsg(self::$_execute);
+        $msg = new xmlrpcmsg(self::$_execute);
 
-        $execute->addParam(new xmlrpcval($this->_db, 'string'));
-        $execute->addParam(new xmlrpcval($this->_uid(), 'int'));
-        $execute->addParam(new xmlrpcval($this->_password, 'string'));
+        $msg->addParam(new xmlrpcval($this->_db, 'string'));
+        $msg->addParam(new xmlrpcval($this->_uid(), 'int'));
+        $msg->addParam(new xmlrpcval($this->_password, 'string'));
 
-        return $execute;
+        return $msg;
     }
 
     /**
      * Odoo XML-RPC context_get method of logged user
      * @return \xmlrpcresp Odoo XML-RPC reponse
+     * @throws \Exception
      */
     public function context_get()
     {
-        $msg = $this->_execute();
-        $msg->addParam(new xmlrpcval('res.users', 'string'));
-        $msg->addParam(new xmlrpcval(self::$_context_get, 'string'));
+        $execute = new xmlrpcmsg(self::$_execute);
 
-        $response = $this->_connection->create(self::$_object)->send($msg);
+        $execute->addParam(new xmlrpcval($this->_db, 'string'));
+        $execute->addParam(new xmlrpcval($this->_uid(), 'int'));
+        $execute->addParam(new xmlrpcval($this->_password, 'string'));
+        $execute->addParam(new xmlrpcval('res.users', 'string'));
+        $execute->addParam(new xmlrpcval(self::$_context_get, 'string'));
 
-        return $response;
+        $response = $this->_connection->create(self::$_object)->send($execute);
+
+        return $this->_response($response);
     }
 
     /**
@@ -228,6 +230,7 @@ class OdooClient
      * @param string $model Odoo model name
      * @param array $data Request input data
      * @return \xmlrpcresp Odoo XML-RPC reponse
+     * @throws \Exception
      */
     public function create($model, $data)
     {
@@ -238,7 +241,7 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_object)->send($msg);
 
-        return $response;
+        return $this->_response($response);
     }
 
     /**
@@ -246,6 +249,7 @@ class OdooClient
      * @param string $model Odoo model name
      * @param array $domain Domain filter array
      * @return \xmlrpcresp Odoo XML-RPC reponse
+     * @throws \Exception
      */
     public function search($model, $domain)
     {
@@ -256,7 +260,7 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_object)->send($msg);
 
-        return $response;
+        return $this->_response($response);
     }
 
     /**
@@ -264,9 +268,11 @@ class OdooClient
      * @param string $model Odoo model name
      * @param array $ids Data IDs
      * @param array $fields Fields of data
-     * @return \xmlrpcresp Odoo XML-RPC reponse
+     * @param null $params
+     * @return xmlrpcresp
+     * @throws \Exception
      */
-    public function read($model, $ids, $fields)
+    public function read($model, $ids, $fields = NULL)
     {
         $msg = $this->_execute();
         $msg->addParam(new xmlrpcval($model, 'string'));
@@ -276,7 +282,7 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_object)->send($msg);
 
-        return $response;
+        return $this->_response($response);
     }
 
     /**
@@ -285,6 +291,7 @@ class OdooClient
      * @param array $domain Domain filter array
      * @param array $fields Fields of data
      * @return \xmlrpcresp Odoo XML-RPC reponse
+     * @throws \Exception
      */
     public function search_read($model, array $domain, array $fields)
     {
@@ -296,7 +303,7 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_object)->send($msg);
 
-        return $response;
+        return $this->_response($response);
     }
 
     /**
@@ -304,6 +311,7 @@ class OdooClient
      * @param string $model Odoo model name
      * @param array $ids Data IDs
      * @return xmlrpcresp|\PhpXmlRpc\Response[]
+     * @throws \Exception
      */
     public function name_get($model, array $ids)
     {
@@ -314,7 +322,7 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_object)->send($msg);
 
-        return $response;
+        return $this->_response($response);
     }
 
     /**
@@ -322,6 +330,7 @@ class OdooClient
      * @param string $model Odoo model name
      * @param array $ids Data IDs
      * @return \xmlrpcresp Odoo XML-RPC reponse
+     * @throws \Exception
      */
     public function unlink($model, $ids)
     {
@@ -332,7 +341,7 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_object)->send($msg);
 
-        return $response;
+        return $this->_response($response);
     }
 
     /**
@@ -341,6 +350,7 @@ class OdooClient
      * @param array $ids Data IDs
      * @param array $values New values
      * @return \xmlrpcresp Odoo XML-RPC reponse
+     * @throws \Exception
      */
     public function write($model, $ids, $values)
     {
@@ -352,15 +362,8 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_object)->send($msg);
 
-        return $response;
+        return $this->_response($response);
     }
-
-    /**
-     * @param $model
-     * @param $method
-     * @param $data
-     * @return mixed
-     */
 
     /**
      * Odoo XML-RPC execute method
@@ -368,6 +371,7 @@ class OdooClient
      * @param string $method Custom method
      * @param array $data Request input data
      * @return \xmlrpcresp Odoo XML-RPC reponse
+     * @throws \Exception
      */
     public function execute($model, $method, $data)
     {
@@ -378,6 +382,22 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_object)->send($msg);
 
+        return $this->_response($response);
+    }
+
+    /**
+     * Odoo XML-RPC return response
+     * @param xmlrpcresp $response
+     * @return xmlrpcresp
+     * @throws \Exception
+     */
+    private function _response(xmlrpcresp $response)
+    {
+        if ($response->errno != 0) {
+            throw new \Exception($response->faultString());
+        }
+
         return $response;
     }
+
 }
