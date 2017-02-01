@@ -240,6 +240,7 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_object)->send($execute);
         $response = $this->_response($response);
+        $response = $this->as_array($response);
 
         return $response;
     }
@@ -286,6 +287,7 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_object)->send($msg);
         $response = $this->_response($response);
+        $response = $this->as_array($response);
 
         return $response;
     }
@@ -314,6 +316,7 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_object)->send($msg);
         $response = $this->_response($response);
+        $response = $this->as_array($response);
 
         return $response;
     }
@@ -341,6 +344,7 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_object)->send($msg);
         $response = $this->_response($response);
+        $response = $this->as_array($response);
 
         return $response;
     }
@@ -364,6 +368,7 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_object)->send($msg);
         $response = $this->_response($response);
+        $response = $this->as_array($response);
 
         return $response;
     }
@@ -444,6 +449,31 @@ class OdooClient
         }
 
         return $response;
+    }
+
+    /**
+     * Transform PhpXmlRpc object to associative array through recursivity
+     * @param $value
+     * @return array mixed
+     */
+    public function as_array($value)
+    {
+        $return = array();
+
+        $value = $value instanceof xmlrpcresp ? $value->value() : $value;
+        foreach ($value AS $key => $item)
+        {
+            $item = $item->scalarval();
+
+            if (is_array($item)) {
+                $return[$key] = $this->as_array($item);
+            }
+            else {
+                $return[$key] = $item;
+            }
+        }
+
+        return $return;
     }
 
 }
