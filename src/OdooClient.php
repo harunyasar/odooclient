@@ -137,6 +137,21 @@ class OdooClient
     }
 
     /**
+     * Star page of Odoo
+     * @return \xmlrpcresp Odoo XML-RPC reponse
+     * @throws \Exception
+     */
+    public function start()
+    {
+        $message = new xmlrpcmsg('start');
+
+        $response = $this->_connection->create('/start')->send($message);
+        $response = $this->_response($response);
+
+        return $response;
+    }
+
+    /**
      * Version of Odoo
      * @return \xmlrpcresp Odoo XML-RPC reponse
      * @throws \Exception
