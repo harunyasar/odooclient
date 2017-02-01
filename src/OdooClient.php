@@ -161,8 +161,9 @@ class OdooClient
         $message = new xmlrpcmsg('version');
 
         $response = $this->_connection->create(self::$_common)->send($message);
+        $response = $this->_response($response);
 
-        return $this->_response($response);
+        return $response;
     }
 
     /**
@@ -238,8 +239,9 @@ class OdooClient
         $execute->addParam(new xmlrpcval(self::$_context_get, xmlrpcval::$xmlrpcString));
 
         $response = $this->_connection->create(self::$_object)->send($execute);
+        $response = $this->_response($response);
 
-        return $this->_response($response);
+        return $response;
     }
 
     /**
@@ -257,8 +259,9 @@ class OdooClient
         $msg->addParam(new xmlrpcval($data, xmlrpcval::$xmlrpcStruct));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
+        $response = $this->_response($response);
 
-        return $this->_response($response);
+        return $response;
     }
 
     /**
@@ -282,8 +285,9 @@ class OdooClient
             $msg->addParam(new xmlrpcval($context, xmlrpcval::$xmlrpcStruct));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
+        $response = $this->_response($response);
 
-        return $this->_response($response);
+        return $response;
     }
 
     /**
@@ -309,8 +313,9 @@ class OdooClient
             $msg->addParam(new xmlrpcval($context, xmlrpcval::$xmlrpcStruct));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
+        $response = $this->_response($response);
 
-        return $this->_response($response);
+        return $response;
     }
 
     /**
@@ -335,8 +340,9 @@ class OdooClient
             $msg->addParam(new xmlrpcval($context, xmlrpcval::$xmlrpcStruct));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
+        $response = $this->_response($response);
 
-        return $this->_response($response);
+        return $response;
     }
 
     /**
@@ -357,8 +363,9 @@ class OdooClient
             $msg->addParam(new xmlrpcval($context, xmlrpcval::$xmlrpcStruct));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
+        $response = $this->_response($response);
 
-        return $this->_response($response);
+        return $response;
     }
 
     /**
@@ -376,8 +383,9 @@ class OdooClient
         $msg->addParam(new xmlrpcval($ids, xmlrpcval::$xmlrpcArray));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
+        $response = $this->_response($response);
 
-        return $this->_response($response);
+        return $response;
     }
 
     /**
@@ -397,8 +405,9 @@ class OdooClient
         $msg->addParam(new xmlrpcval($values, xmlrpcval::$xmlrpcStruct));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
+        $response = $this->_response($response);
 
-        return $this->_response($response);
+        return $response;
     }
 
     /**
@@ -417,8 +426,9 @@ class OdooClient
         $msg->addParam(new xmlrpcval($data, xmlrpcval::$xmlrpcStruct));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
+        $response = $this->_response($response);
 
-        return $this->_response($response);
+        return $response;
     }
 
     /**
