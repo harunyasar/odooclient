@@ -82,6 +82,12 @@ class OdooClient
     private $_host;
 
     /**
+     * Connection port
+     * @var int $_port
+     */
+    private $_port;
+
+    /**
      * Odoo database name
      * @var string $_db
      */
@@ -99,14 +105,8 @@ class OdooClient
     private $_password;
 
     /**
-     * Connection port
-     * @var string $_port
-     */
-    private $_port;
-
-    /**
      * The user ID is returned after the login
-     * @var string $_uid
+     * @var int $_uid
      */
     private $_uid;
 
@@ -124,13 +124,15 @@ class OdooClient
      * @param string $username Login username
      * @param string $password Login password
      */
-    public function __construct($host, $port, $db, $username, $password)
+    public function __construct($host, $port, $db = NULL, $username = NULL, $password = NULL)
     {
         $this->_host = $host;
         $this->_port = $port;
+
         $this->_db = $db;
         $this->_username = $username;
         $this->_password = $password;
+
         $this->_connection = new Connection($this->_host, $this->_port);
     }
 
@@ -175,7 +177,7 @@ class OdooClient
     {
         $response = $this->_login();
 
-        $this->_uid = $response->value()->scalarval();
+        $this->_uid = (int) $response->value()->scalarval();
 
         return $this->_uid;
     }
