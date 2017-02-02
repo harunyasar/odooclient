@@ -28,6 +28,12 @@ class OdooClient
     private static $_execute = 'execute_kw';
 
     /**
+     * res.user model
+     * @var string $_user_model
+     */
+    private static $_user_model = 'res.users';
+
+    /**
      * Odoo XML-RPC context_get method
      * @var string $_context_get
      */
@@ -232,7 +238,7 @@ class OdooClient
     public function context_get(array $parameters = array())
     {
         $msg = $this->_execute();
-        $msg->addParam(new xmlrpcval('res.users', xmlrpcval::$xmlrpcString));
+        $msg->addParam(new xmlrpcval(self::$_user_model, xmlrpcval::$xmlrpcString));
         $msg->addParam(new xmlrpcval(self::$_context_get, xmlrpcval::$xmlrpcString));
         $msg->addParam(new xmlrpcval($parameters, xmlrpcval::$xmlrpcArray));
 
