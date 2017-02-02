@@ -4,6 +4,7 @@ use Odoo\Client\Connection\Connection;
 use PhpXmlRpc\Value as xmlrpcval;
 use PhpXmlRpc\Request as xmlrpcmsg;
 use PhpXmlRpc\Response as xmlrpcresp;
+use Odoo\Transformer\Transformer;
 
 class OdooClient
 {
@@ -117,6 +118,12 @@ class OdooClient
     private $_connection;
 
     /**
+     * Response transformer
+     * @var Transformer $_transformer
+     */
+    private $_transformer;
+
+    /**
      * OdooClient constructor
      * @param string $host Connection host
      * @param int $port Connection port
@@ -134,6 +141,7 @@ class OdooClient
         $this->_password = $password;
 
         $this->_connection = new Connection($this->_host, $this->_port);
+        $this->_transformer = new Transformer();
     }
 
     /**
@@ -162,7 +170,7 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_common)->send($message);
         $response = $this->_response($response);
-        $response = $this->as_array($response);
+        $response = $this->_transformer->toArray($response);
 
         return $response;
     }
@@ -238,7 +246,7 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_object)->send($msg);
         $response = $this->_response($response);
-        $response = $this->as_array($response);
+        $response = $this->_transformer->toArray($response);
 
         return $response;
     }
@@ -281,7 +289,7 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_object)->send($msg);
         $response = $this->_response($response);
-        $response = $this->as_array($response);
+        $response = $this->_transformer->toArray($response);
 
         return $response;
     }
@@ -304,7 +312,7 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_object)->send($msg);
         $response = $this->_response($response);
-        $response = $this->as_array($response);
+        $response = $this->_transformer->toArray($response);
 
         return $response;
     }
@@ -327,7 +335,7 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_object)->send($msg);
         $response = $this->_response($response);
-        $response = $this->as_array($response);
+        $response = $this->_transformer->toArray($response);
 
         return $response;
     }
@@ -350,7 +358,7 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_object)->send($msg);
         $response = $this->_response($response);
-        $response = $this->as_array($response);
+        $response = $this->_transformer->toArray($response);
 
         return $response;
     }
@@ -431,31 +439,6 @@ class OdooClient
         }
 
         return $response;
-    }
-
-    /**
-     * Transform PhpXmlRpc object to associative array through recursivity
-     * @param $value
-     * @return array
-     */
-    public function as_array($value)
-    {
-        $return = array();
-
-        $value = $value instanceof xmlrpcresp ? $value->value() : $value;
-        foreach ($value AS $key => $item)
-        {
-            $item = $item->scalarval();
-
-            if (is_array($item)) {
-                $return[$key] = $this->as_array($item);
-            }
-            else {
-                $return[$key] = $item;
-            }
-        }
-
-        return $return;
     }
 
 }
