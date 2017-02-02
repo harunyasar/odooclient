@@ -1,8 +1,9 @@
 {
     "name": "harunyasar/odooclient",
-    "description": "XML-RPC client for Odoo with phpxml package.",
+    "description": "XML-RPC client for Odoo web service with phpxmlrpc package.",
     "keywords": [
         "odoo",
+        "webservice",
         "client",
         "phpxmlrpc",
         "xmlrpc"
