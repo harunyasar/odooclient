@@ -15,7 +15,7 @@ class OdooClient
     private static $_common = '/xmlrpc/2/common';
 
     /**
-     * The endpoint is used to call methods of odoo models
+     * The endpoint is used to call methods of Odoo models
      * via the execute_kw RPC function.
      * @var string $_object
      */
@@ -137,8 +137,8 @@ class OdooClient
     }
 
     /**
-     * Star page of Odoo
-     * @return \xmlrpcresp Odoo XML-RPC reponse
+     * Start page of Odoo
+     * @return xmlrpcresp|\PhpXmlRpc\Response[]  Odoo XML-RPC response
      * @throws \Exception
      */
     public function start()
@@ -153,7 +153,7 @@ class OdooClient
 
     /**
      * Version of Odoo
-     * @return \xmlrpcresp Odoo XML-RPC reponse
+     * @return array|xmlrpcresp|\PhpXmlRpc\Response[]  Odoo XML-RPC response
      * @throws \Exception
      */
     public function version()
@@ -169,8 +169,8 @@ class OdooClient
 
     /**
      * Login with username and password
-     * @return \xmlrpcresp Odoo XML-RPC reponse
-     * @throws \Exception  Throws exception when login fail
+     * @return xmlrpcresp Odoo XML-RPC response
+     * @throws \Exception Throws exception when login fail
      */
     private function _login()
     {
@@ -187,7 +187,7 @@ class OdooClient
 
     /**
      * Retrieves logged user ID
-     * @return string     Logged user ID
+     * @return int Logged user ID
      * @throws \Exception Throws exception when login fail
      */
     private function _uid()
@@ -201,7 +201,7 @@ class OdooClient
 
     /**
      * Public method to retrieves logged user ID
-     * @return string     Logged user ID
+     * @return int Logged user ID
      * @throws \Exception Throws exception when login fail
      */
     public function getUid()
@@ -211,7 +211,7 @@ class OdooClient
 
     /**
      * Message creator for XML-RPC request
-     * @return xmlrpcmsg
+     * @return xmlrpcmsg Message header
      */
     private function _execute()
     {
@@ -226,8 +226,8 @@ class OdooClient
 
     /**
      * Odoo XML-RPC context_get method of logged user
-     * @return \xmlrpcresp Odoo XML-RPC reponse
-     * @throws \Exception
+     * @param array $parameters Parameters as context, fields, etc
+     * @return array|xmlrpcresp|\PhpXmlRpc\Response[] Odoo XML-RPC reponse
      */
     public function context_get(array $parameters = array())
     {
@@ -247,8 +247,8 @@ class OdooClient
      * Odoo XML-RPC create method
      * @param string $model Odoo model name
      * @param array $data Request input data
-     * @return \xmlrpcresp Odoo XML-RPC reponse
-     * @throws \Exception
+     * @return xmlrpcresp|\PhpXmlRpc\Response[] Odoo XML-RPC response
+     * @throws \Exception Throws exception when request fail
      */
     public function create($model, array $data)
     {
@@ -267,7 +267,8 @@ class OdooClient
      * Odoo XML-RPC search method
      * @param string $model Odoo model name
      * @param array $domain Domain filter array
-     * @return \xmlrpcresp Odoo XML-RPC reponse
+     * @param array $parameters Parameters as context, fields, etc
+     * @return array|xmlrpcresp|\PhpXmlRpc\Response[] Odoo XML-RPC response
      * @throws \Exception
      */
     public function search($model, array $domain, array $parameters = array())
@@ -289,10 +290,9 @@ class OdooClient
      * Odoo XML-RPC read method
      * @param string $model Odoo model name
      * @param array $ids Data IDs
-     * @param array $fields Fields of data
-     * @param null $params
-     * @return xmlrpcresp
-     * @throws \Exception
+     * @param array $parameters Parameters as context, fields, etc
+     * @return array|xmlrpcresp|\PhpXmlRpc\Response[] Odoo XML-RPC response
+     * @throws \Exception Throws exception when request fail
      */
     public function read($model, array $ids, array $parameters = array())
     {
@@ -312,10 +312,10 @@ class OdooClient
     /**
      * Odoo XML-RPC search_read method
      * @param string $model Odoo model name
-     * @param array $domain Domain filter array
-     * @param array $fields Fields of data
-     * @return \xmlrpcresp Odoo XML-RPC reponse
-     * @throws \Exception
+     * @param array $domain Domain filter
+     * @param array $parameters Parameters as context, fields, etc
+     * @return array|xmlrpcresp|\PhpXmlRpc\Response[] Odoo XML-RPC response
+     * @throws \Exception Throws exception when request fail
      */
     public function search_read($model, array $domain, array $parameters = array())
     {
@@ -336,8 +336,9 @@ class OdooClient
      * Odoo XML-RPC name_get method
      * @param string $model Odoo model name
      * @param array $ids Data IDs
-     * @return xmlrpcresp|\PhpXmlRpc\Response[]
-     * @throws \Exception
+     * @param array $parameters Parameters as context, fields, etc
+     * @return array|xmlrpcresp|\PhpXmlRpc\Response[] Odoo XML-RPC response
+     * @throws \Exception Throws exception when request fail
      */
     public function name_get($model, array $ids, array $parameters = array())
     {
@@ -358,8 +359,8 @@ class OdooClient
      * Odoo XML-RPC unlink method
      * @param string $model Odoo model name
      * @param array $ids Data IDs
-     * @return \xmlrpcresp Odoo XML-RPC reponse
-     * @throws \Exception
+     * @return xmlrpcresp|\PhpXmlRpc\Response[] Odoo XML-RPC response
+     * @throws \Exception Throws exception when request fail
      */
     public function unlink($model, array $ids)
     {
@@ -379,8 +380,8 @@ class OdooClient
      * @param string $model Odoo model name
      * @param array $ids Data IDs
      * @param array $values New values
-     * @return \xmlrpcresp Odoo XML-RPC reponse
-     * @throws \Exception
+     * @return xmlrpcresp|\PhpXmlRpc\Response[] Odoo XML-RPC response
+     * @throws \Exception Throws exception when request fail
      */
     public function write($model, array $ids, array $values)
     {
@@ -401,8 +402,8 @@ class OdooClient
      * @param string $model Odoo model name
      * @param string $method Custom method
      * @param array $data Request input data
-     * @return \xmlrpcresp Odoo XML-RPC reponse
-     * @throws \Exception
+     * @return xmlrpcresp|\PhpXmlRpc\Response[] Odoo XML-RPC response
+     * @throws \Exception Throws exception when request fail
      */
     public function execute($model, $method, array $data)
     {
@@ -420,8 +421,8 @@ class OdooClient
     /**
      * Odoo XML-RPC return response
      * @param xmlrpcresp $response
-     * @return xmlrpcresp
-     * @throws \Exception
+     * @return xmlrpcresp Odoo XML-RPC response
+     * @throws \Exception Throws exception when request fail
      */
     private function _response(xmlrpcresp $response)
     {
@@ -435,7 +436,7 @@ class OdooClient
     /**
      * Transform PhpXmlRpc object to associative array through recursivity
      * @param $value
-     * @return array mixed
+     * @return array
      */
     public function as_array($value)
     {
