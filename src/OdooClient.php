@@ -4,7 +4,6 @@ use Odoo\Client\Connection\Connection;
 use PhpXmlRpc\Value as xmlrpcval;
 use PhpXmlRpc\Request as xmlrpcmsg;
 use PhpXmlRpc\Response as xmlrpcresp;
-use Odoo\Client\Transformer;
 
 class OdooClient
 {
@@ -124,10 +123,10 @@ class OdooClient
     private $_connection;
 
     /**
-     * Response transformer
-     * @var Transformer $_transformer
+     * Response transform
+     * @var Transformer $_transform
      */
-    private $_transformer;
+    private $_transform;
 
     /**
      * OdooClient constructor
