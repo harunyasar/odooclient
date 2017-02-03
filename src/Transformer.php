@@ -1,4 +1,4 @@
-<?php namespace Odoo\Client\Transformer;
+<?php namespace Odoo\Client;
 
 use PhpXmlRpc\Response as xmlrpcresp;
 
