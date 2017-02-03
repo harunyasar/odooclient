@@ -147,7 +147,7 @@ class OdooClient
         $this->_password = $password;
 
         $this->_connection = new Connection($this->_host, $this->_port);
-        $this->_transformer = new Transformer();
+        $this->_transform = new Transformer();
     }
 
     /**
@@ -160,7 +160,7 @@ class OdooClient
         $message = new xmlrpcmsg('start');
 
         $response = $this->_connection->create('/start')->send($message);
-        $response = $this->_response($response);
+        $response = $this->_checkResponse($response);
 
         return $response;
     }
@@ -175,8 +175,8 @@ class OdooClient
         $message = new xmlrpcmsg('version');
 
         $response = $this->_connection->create(self::$_common)->send($message);
-        $response = $this->_response($response);
-        $response = $this->_transformer->toArray($response);
+        $response = $this->_checkResponse($response);
+        $response = $this->_transform->toArray($response);
 
         return $response;
     }
@@ -196,7 +196,7 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_common)->send($message);
 
-        return $this->_response($response);
+        return $this->_checkResponse($response);
     }
 
     /**
@@ -224,21 +224,6 @@ class OdooClient
     }
 
     /**
-     * Message creator for XML-RPC request
-     * @return xmlrpcmsg Message header
-     */
-    private function createMessageHeader()
-    {
-        $msg = new xmlrpcmsg(self::$_execute);
-
-        $msg->addParam(new xmlrpcval($this->_db, xmlrpcval::$xmlrpcString));
-        $msg->addParam(new xmlrpcval($this->_uid(), xmlrpcval::$xmlrpcInt));
-        $msg->addParam(new xmlrpcval($this->_password, xmlrpcval::$xmlrpcString));
-
-        return $msg;
-    }
-
-    /**
      * Odoo XML-RPC context_get method of logged user
      * @param array $parameters Parameters as context, fields, etc
      * @return array|xmlrpcresp|\PhpXmlRpc\Response[] Odoo XML-RPC reponse
@@ -251,8 +236,8 @@ class OdooClient
         $msg->addParam(new xmlrpcval($parameters, xmlrpcval::$xmlrpcArray));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
-        $response = $this->_response($response);
-        $response = $this->_transformer->toArray($response);
+        $response = $this->_checkResponse($response);
+        $response = $this->_transform->toArray($response);
 
         return $response;
     }
@@ -272,7 +257,7 @@ class OdooClient
         $msg->addParam(new xmlrpcval($data, xmlrpcval::$xmlrpcStruct));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
-        $response = $this->_response($response);
+        $response = $this->_checkResponse($response);
 
         return $response;
     }
@@ -294,8 +279,8 @@ class OdooClient
         $msg->addParam(new xmlrpcval($parameters, xmlrpcval::$xmlrpcStruct));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
-        $response = $this->_response($response);
-        $response = $this->_transformer->toArray($response);
+        $response = $this->_checkResponse($response);
+        $response = $this->_transform->toArray($response);
 
         return $response;
     }
@@ -317,8 +302,8 @@ class OdooClient
         $msg->addParam(new xmlrpcval($parameters, xmlrpcval::$xmlrpcStruct));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
-        $response = $this->_response($response);
-        $response = $this->_transformer->toArray($response);
+        $response = $this->_checkResponse($response);
+        $response = $this->_transform->toArray($response);
 
         return $response;
     }
@@ -340,8 +325,8 @@ class OdooClient
         $msg->addParam(new xmlrpcval($parameters, xmlrpcval::$xmlrpcStruct));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
-        $response = $this->_response($response);
-        $response = $this->_transformer->toArray($response);
+        $response = $this->_checkResponse($response);
+        $response = $this->_transform->toArray($response);
 
         return $response;
     }
@@ -363,8 +348,8 @@ class OdooClient
         $msg->addParam(new xmlrpcval($parameters, xmlrpcval::$xmlrpcStruct));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
-        $response = $this->_response($response);
-        $response = $this->_transformer->toArray($response);
+        $response = $this->_checkResponse($response);
+        $response = $this->_transform->toArray($response);
 
         return $response;
     }
@@ -384,7 +369,7 @@ class OdooClient
         $msg->addParam(new xmlrpcval($ids, xmlrpcval::$xmlrpcArray));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
-        $response = $this->_response($response);
+        $response = $this->_checkResponse($response);
 
         return $response;
     }
@@ -406,7 +391,7 @@ class OdooClient
         $msg->addParam(new xmlrpcval($values, xmlrpcval::$xmlrpcStruct));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
-        $response = $this->_response($response);
+        $response = $this->_checkResponse($response);
 
         return $response;
     }
@@ -427,9 +412,24 @@ class OdooClient
         $msg->addParam(new xmlrpcval($data, xmlrpcval::$xmlrpcStruct));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
-        $response = $this->_response($response);
+        $response = $this->_checkResponse($response);
 
         return $response;
+    }
+
+    /**
+     * Message creator for XML-RPC request
+     * @return xmlrpcmsg Message header
+     */
+    private function createMessageHeader()
+    {
+        $msg = new xmlrpcmsg(self::$_execute);
+
+        $msg->addParam(new xmlrpcval($this->_db, xmlrpcval::$xmlrpcString));
+        $msg->addParam(new xmlrpcval($this->_uid(), xmlrpcval::$xmlrpcInt));
+        $msg->addParam(new xmlrpcval($this->_password, xmlrpcval::$xmlrpcString));
+
+        return $msg;
     }
 
     /**
@@ -438,7 +438,7 @@ class OdooClient
      * @return xmlrpcresp Odoo XML-RPC response
      * @throws \Exception Throws exception when request fail
      */
-    private function _response(xmlrpcresp $response)
+    private function _checkResponse(xmlrpcresp $response)
     {
         if ($response->errno != 0) {
             throw new \Exception($response->faultString());
