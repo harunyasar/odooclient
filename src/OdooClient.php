@@ -83,6 +83,12 @@ class OdooClient
     private static $_name_get = 'name_get';
 
     /**
+     * Odoo XML-RPC check_access_rights method
+     * @var string $_check_access_rights
+     */
+    private static $_check_access_rights = 'check_access_rights';
+
+    /**
      * Connection host
      * @var string $_host
      */
@@ -296,6 +302,29 @@ class OdooClient
         $response = $this->_connection->create(self::$_object)->send($msg);
         $response = $this->_response($response);
         $response = $this->_transformer->toArray($response);
+
+        return $response;
+    }
+
+    /**
+     * Odoo XML-RPC check access rights method
+     * @param string $model Odoo model name
+     * @param array $rights access to check
+     * @param array $parameters Parameters as raise_exception
+     * @return bool|xmlrpcresp|\PhpXmlRpc\Response[] Odoo XML-RPC response
+     * @throws \Exception
+     */
+    public function check_access_rights($model, array $rights, array $parameters = array())
+    {
+        $msg = $this->createMessageHeader();
+        $msg->addParam(new xmlrpcval($model, xmlrpcval::$xmlrpcString));
+        $msg->addParam(new xmlrpcval(self::$_check_access_rights, xmlrpcval::$xmlrpcString));
+        $msg->addParam(new xmlrpcval($rights, xmlrpcval::$xmlrpcArray));
+        $msg->addParam(new xmlrpcval($parameters, xmlrpcval::$xmlrpcStruct));
+
+        $response = $this->_connection->create(self::$_object)->send($msg);
+        $response = $this->_response($response);
+        $response = $response->value()->scalarval();
 
         return $response;
     }
