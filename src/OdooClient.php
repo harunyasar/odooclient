@@ -1,6 +1,7 @@
 <?php namespace Odoo\Client;
 
 use Odoo\Client\Connection\Connection;
+use Odoo\Client\Transformer\Transformer;
 use PhpXmlRpc\Value as xmlrpcval;
 use PhpXmlRpc\Request as xmlrpcmsg;
 use PhpXmlRpc\Response as xmlrpcresp;
