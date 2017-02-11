@@ -77,6 +77,12 @@ class OdooClient
     private static $_search_read = 'search_read';
 
     /**
+     * Odoo XML-RPC search_count method
+     * @var string $_search_count
+     */
+    private static $_search_count = 'search_count';
+
+    /**
      * Odoo XML-RPC name_get method
      * @var string $_name_get
      */
@@ -362,6 +368,26 @@ class OdooClient
         $response = $this->_transform->toArray($response);
 
         return $response;
+    }
+
+    /**
+     * Odoo XML-RPC search_count method
+     * @param string $model Odoo model name
+     * @param array $domain Domain filter array
+     * @return array|xmlrpcresp|\PhpXmlRpc\Response[] Odoo XML-RPC response
+     * @throws \Exception
+     */
+    public function search_count($model, array $domain)
+    {
+        $msg = $this->_createMessageHeader();
+        $msg->addParam(new xmlrpcval($model, xmlrpcval::$xmlrpcString));
+        $msg->addParam(new xmlrpcval(self::$_search_count, xmlrpcval::$xmlrpcString));
+        $msg->addParam(new xmlrpcval($domain, xmlrpcval::$xmlrpcArray));
+
+        $response = $this->_connection->create(self::$_object)->send($msg);
+        $response = $this->_checkResponse($response);
+
+        return $response->value()->scalarval();
     }
 
     /**
