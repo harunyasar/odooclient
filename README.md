@@ -17,5 +17,4 @@ $client->create('modelName', $dataArr);
 
 ## TODO
 
-* Write tests
 * Write the whole usage examples
