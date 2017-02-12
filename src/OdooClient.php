@@ -83,6 +83,12 @@ class OdooClient
     private static $_name_get = 'name_get';
 
     /**
+     * Odoo XML-RPC fields_get method
+     * @var string $_fields_get
+     */
+    private static $_fields_get = 'fields_get';
+
+    /**
      * Odoo XML-RPC check_access_rights method
      * @var string $_check_access_rights
      */
@@ -379,6 +385,29 @@ class OdooClient
         $msg->addParam(new xmlrpcval(self::$_name_get, xmlrpcval::$xmlrpcString));
         $msg->addParam(new xmlrpcval($ids, xmlrpcval::$xmlrpcArray));
         $msg->addParam(new xmlrpcval($parameters, xmlrpcval::$xmlrpcStruct));
+
+        $response = $this->_connection->create(self::$_object)->send($msg);
+        $response = $this->_checkResponse($response);
+        $response = $this->_transform->toArray($response);
+
+        return $response;
+    }
+
+    /**
+     * Odoo XML-RPC fields_get method
+     * @param string $model Odoo model name
+     * @param array $fields list of fields to document, all if empty or not provided
+     * @param array $attributes list of description attributes to return for each field, all if empty or not provided
+     * @return array|xmlrpcresp|\PhpXmlRpc\Response[] Odoo XML-RPC response
+     * @throws \Exception Throws exception when request fail
+     */
+    public function fields_get($model, array $fields, array $attributes = array())
+    {
+        $msg = $this->_createMessageHeader();
+        $msg->addParam(new xmlrpcval($model, xmlrpcval::$xmlrpcString));
+        $msg->addParam(new xmlrpcval(self::$_fields_get, xmlrpcval::$xmlrpcString));
+        $msg->addParam(new xmlrpcval($fields, xmlrpcval::$xmlrpcArray));
+        $msg->addParam(new xmlrpcval($attributes, xmlrpcval::$xmlrpcStruct));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
         $response = $this->_checkResponse($response);
