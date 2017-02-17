@@ -252,7 +252,7 @@ class OdooClient
      * Odoo XML-RPC create method
      * @param string $model Odoo model name
      * @param array $data Request input data
-     * @return xmlrpcresp|\PhpXmlRpc\Response[] Odoo XML-RPC response
+     * @return bool|int Odoo XML-RPC response
      * @throws \Exception Throws exception when request fail
      */
     public function create($model, array $data)
@@ -260,10 +260,14 @@ class OdooClient
         $msg = $this->_createMessageHeader();
         $msg->addParam(new xmlrpcval($model, xmlrpcval::$xmlrpcString));
         $msg->addParam(new xmlrpcval(self::$_create, xmlrpcval::$xmlrpcString));
-        $msg->addParam(new xmlrpcval($data, xmlrpcval::$xmlrpcStruct));
+        $msg->addParam(new xmlrpcval($data, xmlrpcval::$xmlrpcArray));
 
         $response = $this->_connection->create(self::$_object)->send($msg);
         $response = $this->_checkResponse($response);
+        $response = $this->_transform->toArray($response);
+
+        // Extract new ID inserted
+        $response = (isset($response['int']) ? (int)$response['int'] : FALSE);
 
         return $response;
     }
@@ -391,7 +395,7 @@ class OdooClient
      * Odoo XML-RPC unlink method
      * @param string $model Odoo model name
      * @param array $ids Data IDs
-     * @return xmlrpcresp|\PhpXmlRpc\Response[] Odoo XML-RPC response
+     * @return bool Odoo XML-RPC response
      * @throws \Exception Throws exception when request fail
      */
     public function unlink($model, array $ids)
@@ -404,7 +408,10 @@ class OdooClient
         $response = $this->_connection->create(self::$_object)->send($msg);
         $response = $this->_checkResponse($response);
 
-        return $response;
+        // Extract response
+        $response = (int) $response->value()->scalarval();
+
+        return ($response === 1 ? TRUE : FALSE);
     }
 
     /**
@@ -412,11 +419,14 @@ class OdooClient
      * @param string $model Odoo model name
      * @param array $ids Data IDs
      * @param array $values New values
-     * @return xmlrpcresp|\PhpXmlRpc\Response[] Odoo XML-RPC response
+     * @return bool Odoo XML-RPC response
      * @throws \Exception Throws exception when request fail
      */
     public function write($model, array $ids, array $values)
     {
+        // format array which contains values
+        $values = array('vals' => new xmlrpcval($values, xmlrpcval::$xmlrpcStruct));
+
         $msg = $this->_createMessageHeader();
         $msg->addParam(new xmlrpcval($model, xmlrpcval::$xmlrpcString));
         $msg->addParam(new xmlrpcval(self::$_write, xmlrpcval::$xmlrpcString));
@@ -426,7 +436,10 @@ class OdooClient
         $response = $this->_connection->create(self::$_object)->send($msg);
         $response = $this->_checkResponse($response);
 
-        return $response;
+        // Extract response
+        $response = (int) $response->value()->scalarval();
+
+        return ($response === 1 ? TRUE : FALSE);
     }
 
     /**
