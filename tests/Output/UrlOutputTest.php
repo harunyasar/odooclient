@@ -11,9 +11,10 @@ class UrlOutputTest extends \PHPUnit_Framework_TestCase
         $host = 'test.example.com';
         $port = 8069;
         $type = null;
+        $expected = 'test.example.com:8069';
 
         $output = $urlOutput->createUrl($host, $port, $type);
 
-        $this->assertSame('test.example.com:8069', $output);
+        $this->assertSame($expected, $output);
     }
 }
