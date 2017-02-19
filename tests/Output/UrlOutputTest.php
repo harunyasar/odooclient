@@ -2,7 +2,7 @@
 
 use Odoo\Client\Output\UrlOutput;
 
-class UrlOutPutTest extends \PHPUnit_Framework_TestCase
+class UrlOutputTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateUrl()
     {
