@@ -377,7 +377,7 @@ class OdooClient
     }
 
     /**
-     * Odoo XML-RPC search_count method
+     * Returns the number of records in the current model matching the provided domain.
      * @param string $model Odoo model name
      * @param array $domain Domain filter array
      * @return array|xmlrpcresp|\PhpXmlRpc\Response[] Odoo XML-RPC response
