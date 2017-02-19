@@ -420,7 +420,7 @@ class OdooClient
     }
 
     /**
-     * Odoo XML-RPC fields_get method
+     * Return the definition of each field.
      * @param string $model Odoo model name
      * @param array $fields list of fields to document, all if empty or not provided
      * @param array $attributes list of description attributes to return for each field, all if empty or not provided
