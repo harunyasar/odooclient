@@ -20,6 +20,7 @@ class FieldsViewsTest extends TestOdooClient
 
         $this->assertNotNull($res);
         $this->assertTrue(is_array($res));
+        $this->assertArrayHasKey('name', $res);
         $this->assertArrayHasKey('code', $res);
         $this->assertArrayHasKey('phone_code', $res);
     }
