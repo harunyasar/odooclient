@@ -381,7 +381,7 @@ class OdooClient
     }
 
     /**
-     * Odoo XML-RPC search_count method
+     * Returns the number of records in the current model matching the provided domain.
      * @param string $model Odoo model name
      * @param array $domain Domain filter array
      * @return array|xmlrpcresp|\PhpXmlRpc\Response[] Odoo XML-RPC response
@@ -424,7 +424,7 @@ class OdooClient
     }
 
     /**
-     * Odoo XML-RPC fields_get method
+     * Return the definition of each field.
      * @param string $model Odoo model name
      * @param array $fields list of fields to document, all if empty or not provided
      * @param array $attributes list of description attributes to return for each field, all if empty or not provided
