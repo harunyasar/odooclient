@@ -1,6 +1,7 @@
 <?php namespace Odoo\Client\Transformer;
 
 use PhpXmlRpc\Response as xmlrpcresp;
+use PhpXmlRpc\Value as xmlrpcval;
 
 class Transformer
 {
@@ -14,8 +15,10 @@ class Transformer
         $return = array();
 
         $value = $value instanceof xmlrpcresp ? $value->value() : $value;
-        foreach ($value as $key => $item) {
-            $item = $item->scalarval();
+
+        foreach ($value as $key => $item)
+        {
+            $item = $item instanceof xmlrpcval ? $item->scalarval() : $item;
 
             if (is_array($item)) {
                 $return[$key] = $this->toArray($item);
