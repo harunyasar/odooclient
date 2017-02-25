@@ -51,4 +51,36 @@ class SearchTest extends TestOdooClient
         $this->assertArrayHasKey(0, $ids);
         $this->assertEquals($ids[0], 235);
     }
+
+    public function testSearchCountWithDomainFilter()
+    {
+        $domain = array(
+            new xmlrpcval('code', xmlrpcval::$xmlrpcString),
+            new xmlrpcval('=', xmlrpcval::$xmlrpcString),
+            new xmlrpcval('US', xmlrpcval::$xmlrpcString)
+        );
+
+        $filter = array(new xmlrpcval($domain, xmlrpcval::$xmlrpcArray));
+
+        $domainFilter = array(new xmlrpcval($filter, xmlrpcval::$xmlrpcArray));
+
+        $client = new OdooClient($this->_host, $this->_port, $this->_db, $this->_username, $this->_password);
+
+        $count = $client->search_count($this->_model_name, $domainFilter);
+
+        $this->assertEquals($count, 1);
+    }
+
+    public function testSearchCountWithoutDomainFilter()
+    {
+        $filter = array();
+
+        $domainFilter = array(new xmlrpcval($filter, xmlrpcval::$xmlrpcArray));
+
+        $client = new OdooClient($this->_host, $this->_port, $this->_db, $this->_username, $this->_password);
+
+        $count = $client->search_count($this->_model_name, $domainFilter);
+
+        $this->assertEquals($count, 253);
+    }
 }
