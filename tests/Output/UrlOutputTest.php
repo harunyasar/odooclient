@@ -1,8 +1,9 @@
 <?php namespace Odoo\Client\Test\Output;
 
 use Odoo\Client\Output\UrlOutput;
+use PHPUnit\Framework\TestCase;
 
-class UrlOutputTest extends \PHPUnit_Framework_TestCase
+class UrlOutputTest extends TestCase
 {
     public function testCreateUrl()
     {
