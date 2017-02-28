@@ -1,9 +1,9 @@
 <?php
-
 namespace Odoo\Client\Test;
 
+use PHPUnit\Framework\TestCase;
 
-class TestOdooClient extends \PHPUnit_Framework_TestCase
+class TestOdooClient extends TestCase
 {
     protected $_host = 'https://odoophpclient.odoo.com';
 
