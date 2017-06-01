@@ -1,6 +1,6 @@
 <?php namespace Odoo\Client\Connection;
 
-use Odoo\Client\Output\UrlOutput;
+use Odoo\Client\Output\UrlOutput as UrlOutput;
 use PhpXmlRpc\Client as xmlrpc_client;
 
 class Connection implements ConnectionInterface
@@ -31,7 +31,7 @@ class Connection implements ConnectionInterface
 
     /**
      * Connection url
-     * @var string
+     * @var object
      */
     private $_url;
 
@@ -64,6 +64,7 @@ class Connection implements ConnectionInterface
 
         $this->_client = new xmlrpc_client($url);
         $this->_client->setSSLVerifyPeer(0);
+
         return $this->_client;
     }
 }
