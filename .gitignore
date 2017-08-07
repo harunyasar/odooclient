@@ -1,8 +1,15 @@
 build
-composer.lock
 docs
-vendor
-.idea
-.DS_Store
 /code-coverage/
 *.iml
+
+# Composer
+composer.lock
+vendor
+
+#IDE
+.idea
+
+# OS
+.DS_Store
+.AppleDouble
