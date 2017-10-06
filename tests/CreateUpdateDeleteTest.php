@@ -9,7 +9,7 @@ class CreateUpdateDeleteTest extends TestOdooClient
 {
     private $_modelName = 'res.country.state';
     private $_countryIdTurkey = 226;
-    private $_stateCode = 'STA';
+    private $_stateCode = 'ST4';
     private $_originalStateName = 'İstanbul, (Stambul)';
     private $_updatedStateName = 'İstanbul';
 

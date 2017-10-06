@@ -480,7 +480,8 @@ class OdooClient
     public function write($model, array $ids, array $values)
     {
         // format array which contains values
-        $values = array('vals' => new xmlrpcval($values, xmlrpcval::$xmlrpcStruct));
+        $key = $model == 'res.company' ? 'values' : 'vals';
+        $values = array($key => new xmlrpcval($values, xmlrpcval::$xmlrpcStruct));
 
         $msg = $this->_createMessageHeader();
         $msg->addParam(new xmlrpcval($model, xmlrpcval::$xmlrpcString));
