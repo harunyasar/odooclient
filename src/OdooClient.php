@@ -279,7 +279,7 @@ class OdooClient
         $response = $this->_transform->toArray($response);
 
         // Extract new ID inserted
-        $response = (isset($response['int']) ? (int)$response['int'] : FALSE);
+        $response = (isset($response['int']) ? (int) $response['int'] : FALSE);
 
         return $response;
     }
