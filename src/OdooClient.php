@@ -479,8 +479,37 @@ class OdooClient
      */
     public function write($model, array $ids, array $values)
     {
+        try {
+            $msg = $this->_writeMessage($model, $ids, $values, 'vals');
+            $response = $this->_connection->create(self::$_object)->send($msg);
+
+            try {
+                $msg = $this->_writeMessage($model, $ids, $values, 'values');
+                $response = $this->_connection->create(self::$_object)->send($msg);
+            } catch (\Exception $e) {
+                throw $e;
+            }
+        } catch (\Exception $e) { }
+
+        $response = $this->_checkResponse($response);
+
+        // Extract response
+        $response = (int) $response->value()->scalarval();
+
+        return ($response === 1 ? TRUE : FALSE);
+    }
+
+    /**
+     * Create only message for write method
+     * @param string $model Odoo model name
+     * @param array $ids Data IDs
+     * @param array $values New values
+     * @param string $key Values wrapper
+     * @return xmlrpcmsg
+     */
+    private function _writeMessage($model, array $ids, array $values, $key) {
         // format array which contains values
-        $key = $model == 'res.company' ? 'values' : 'vals';
+        // sometimes the key is 'values' or 'vals'
         $values = array($key => new xmlrpcval($values, xmlrpcval::$xmlrpcStruct));
 
         $msg = $this->_createMessageHeader();
@@ -489,13 +518,7 @@ class OdooClient
         $msg->addParam(new xmlrpcval($ids, xmlrpcval::$xmlrpcArray));
         $msg->addParam(new xmlrpcval($values, xmlrpcval::$xmlrpcStruct));
 
-        $response = $this->_connection->create(self::$_object)->send($msg);
-        $response = $this->_checkResponse($response);
-
-        // Extract response
-        $response = (int) $response->value()->scalarval();
-
-        return ($response === 1 ? TRUE : FALSE);
+        return $msg;
     }
 
     /**
