@@ -276,12 +276,11 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_object)->send($msg);
         $response = $this->_checkResponse($response);
-        $response = $this->_transform->toArray($response);
 
         // Extract new ID inserted
-        $response = (isset($response['int']) ? (int) $response['int'] : FALSE);
+        $response = (int) $response->value()->scalarval();
 
-        return $response;
+        return ($response > 0 ? $response : FALSE);
     }
 
     /**
