@@ -478,24 +478,28 @@ class OdooClient
      */
     public function write($model, array $ids, array $values)
     {
+        // Sometimes the model need to wrap data with a key named VALS
         try {
-            $msg = $this->_writeMessage($model, $ids, $values, 'vals');
-            $response = $this->_connection->create(self::$_object)->send($msg);
+            $response = $this->_write($model, $ids, $values, 'vals');
+            // Extract response
+            $response = (int) $response->value()->scalarval();
+            return ($response === 1 ? TRUE : FALSE);
+        } catch (\Exception $e) {
+          $writeError = $e;
+        }
 
-            try {
-                $msg = $this->_writeMessage($model, $ids, $values, 'values');
-                $response = $this->_connection->create(self::$_object)->send($msg);
-            } catch (\Exception $e) {
-                throw $e;
-            }
-        } catch (\Exception $e) { }
+        // And sometimes the model need to wrap data with a key named VALUES
+        try {
+            $response = $this->_write($model, $ids, $values, 'values');
+            // Extract response
+            $response = (int) $response->value()->scalarval();
+            return ($response === 1 ? TRUE : FALSE);
+        } catch (\Exception $e) {
+          $writeError = $e;
+        }
 
-        $response = $this->_checkResponse($response);
-
-        // Extract response
-        $response = (int) $response->value()->scalarval();
-
-        return ($response === 1 ? TRUE : FALSE);
+        throw $writeError;
+        return FALSE;
     }
 
     /**
@@ -506,9 +510,8 @@ class OdooClient
      * @param string $key Values wrapper
      * @return xmlrpcmsg
      */
-    private function _writeMessage($model, array $ids, array $values, $key) {
+    private function _write($model, array $ids, array $values, $key) {
         // format array which contains values
-        // sometimes the key is 'values' or 'vals'
         $values = array($key => new xmlrpcval($values, xmlrpcval::$xmlrpcStruct));
 
         $msg = $this->_createMessageHeader();
@@ -517,7 +520,10 @@ class OdooClient
         $msg->addParam(new xmlrpcval($ids, xmlrpcval::$xmlrpcArray));
         $msg->addParam(new xmlrpcval($values, xmlrpcval::$xmlrpcStruct));
 
-        return $msg;
+        $response = $this->_connection->create(self::$_object)->send($msg);
+        $response = $this->_checkResponse($response);
+
+        return $response;
     }
 
     /**
