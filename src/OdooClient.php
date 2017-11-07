@@ -101,6 +101,12 @@ class OdooClient
     private static $_check_access_rights = 'check_access_rights';
 
     /**
+     * Odoo XML-RPC product_id_change method
+     * @var string $_product_id_change
+     */
+    private static $_product_id_change = 'product_id_change';
+
+    /**
      * Connection host
      * @var string $_host
      */
@@ -522,6 +528,27 @@ class OdooClient
 
         $response = $this->_connection->create(self::$_object)->send($msg);
         $response = $this->_checkResponse($response);
+
+        return $response;
+    }
+
+    /**
+     * Odoo XML-RPC product_id_change method
+     * @param string $model Odoo model name
+     * @param array $ids Data IDs
+     * @return array|xmlrpcresp|\PhpXmlRpc\Response[] Odoo XML-RPC response
+     * @throws \Exception Throws exception when request fail
+     */
+    public function product_id_change($model, array $ids)
+    {
+        $msg = $this->_createMessageHeader();
+        $msg->addParam(new xmlrpcval($model, xmlrpcval::$xmlrpcString));
+        $msg->addParam(new xmlrpcval(self::$_product_id_change, xmlrpcval::$xmlrpcString));
+        $msg->addParam(new xmlrpcval($ids, xmlrpcval::$xmlrpcArray));
+
+        $response = $this->_connection->create(self::$_object)->send($msg);
+        $response = $this->_checkResponse($response);
+        $response = $this->_transform->toArray($response);
 
         return $response;
     }
