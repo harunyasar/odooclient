@@ -2,7 +2,8 @@
 
 use Odoo\Client\Output\UrlOutputInterface;
 
-class UrlOutput implements UrlOutputInterface {
+class UrlOutput implements UrlOutputInterface
+{
     /**
      * Formatting URL for connection
      * @param string $host Connection host

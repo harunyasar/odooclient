@@ -9,9 +9,12 @@ class CreateUpdateDeleteTest extends TestOdooClient
 {
     private $_modelName = 'res.country.state';
     private $_countryIdTurkey = 226;
-    private $_stateCode = 'STA';
     private $_originalStateName = 'İstanbul, (Stambul)';
     private $_updatedStateName = 'İstanbul';
+
+    //increment this value if you got the ValidationError message
+    //'The code of the state must be unique by country !'
+    private $_stateCode = 'STA4';
 
     public function testMyScenario()
     {
